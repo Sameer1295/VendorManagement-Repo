@@ -31,6 +31,7 @@ class Vendor extends Authenticatable implements MustVerifyEmail
         'contact_person',
         'contact_person_mobile',
         'contact_person_email',
-        'email_verification_code'
+        'email_verification_code',
+        'otp'
     ];
 }

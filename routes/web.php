@@ -38,8 +38,9 @@ Route::get('home',function(){
 Route::get('rejected',[VendorController::class,'rejected'])->name('rejected')->middleware('auth');
 Route::get('accepted',[VendorController::class,'accepted'])->name('accepted')->middleware('auth');
 
+Route::get('checkOTP/$request',[VendorController::class,'checkOTP'])->name('checkOTP');
 Route::get('/vendor/verify-email/{verification_code}',[VendorController::class,'verify_email'])->name('verify_email');
 
 //access to all
-
+Route::get('registeration',[VendorController::class,'registeration'])->name('registeration');
 Route::resource('vendor', VendorController::class);

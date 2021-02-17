@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Home') }}</div>
                     
                 <div class="card-body">
-                    <a href="{{route('vendor.create')}}">
+                    <a href="{{route('registeration')}}">
                         <div class="py-4">
                             Apply for Vendor Registration here!!
                         </div>

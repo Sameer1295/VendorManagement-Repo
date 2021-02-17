@@ -7,7 +7,7 @@ use App\Models\Vendor;
 use Mail;
 use App\Mail\EmailVerficationMail;
 use Illuminate\Support\Str;
-
+use Carbon\Carbon;
 
 class VendorController extends Controller
 {
@@ -16,6 +16,7 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
         $vendors = Vendor::all();
@@ -31,6 +32,11 @@ class VendorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {
+        //return view('vendor.registration');
+    }
+
+    public function registeration()
     {
         return view('vendor.registration');
     }
@@ -92,7 +98,8 @@ class VendorController extends Controller
             'company_certificate'=>$filename2,
             'pan'=>$filename3,
             'adhaar'=>$filename4,
-            'email_verification_code'=>Str::random(40)
+            'email_verification_code'=>Str::random(40),
+            'otp' => random_int(100000,999999)
             ]);
         //dd($request->all());
         
@@ -195,17 +202,31 @@ class VendorController extends Controller
     public function verify_email($verification_code){
         
         $vendor=Vendor::where('email_verification_code',$verification_code)->first();
-        if($vendor){
-            return redirect()->route('vendor.create')->with('error','Invalid url');
+        if($vendor->count){
+            return redirect()->route('vendor.create')->with('success','Invalid url');
         }else{
-            if($vendor->email_verified_at){
-            return redirect()->route('vendor.create')->with('error','Email already verified');
+            if($vendor->email_verified_at == null){
+                return view('vendor.checkOTP');
             }else{
-                $vendor->update([
-                    'email_verified_at'=>Carbon::now()
-                ]);
-                return redirect()->route('vendor.create')->with('success','Email successfully verified');
+                return redirect()->route('vendor.create')->with('success','Email already verified');
             }
         }
     }
+
+    public function checkOTP(Request $request){
+        $vendor=Vendor::where('otp',$request->input('otp'))->first();
+        if($vendor->count){
+            return redirect()->route('vendor.create')->with('success','Invalid url');
+        }else{
+            if($vendor->email_verified_at == null){
+                $vendor->email_verified_at = Carbon::now()->toDateTimeString();
+                $vendor->save();
+                return redirect()->route('vendor.create')->with('success','Email successfully verified');
+            }else{
+                return redirect()->route('vendor.create')->with('success','Email already verified');
+            }
+        }
+        
+    }
+    
 }

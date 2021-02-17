@@ -22,7 +22,7 @@
                     {{__('You are logged in supervisor')}}
 
                     @elseif(Auth::guest())
-                    <a href="{{route('vendor.create')}}">
+                    <a href="{{route('registeration')}}">
                         <div class="py-4">
                             Apply for Vendor Registration here!!
                         </div>
